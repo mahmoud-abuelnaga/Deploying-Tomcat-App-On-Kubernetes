@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+spec:
+  selector:
+    matchLabels:
+      tier: database
+
+  serviceName: database-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        tier: database
+
+    spec:
+      containers:
+        - name: mariadb-container
+          image: mariadb:12.0.2-ubi
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PASSWORD
+                  name: database-root-credentials
+
+            - name: MARIADB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: USERNAME
+                  name: database-app-credentials
+
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PASSWORD
+                  name: database-app-credentials
+
+            - name: MARIADB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE
+                  name: database-app-credentials
+
+          ports:
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+
+          volumeMounts:
+            - name: db-storage
+              mountPath: /var/lib/mysql
+
+            - name: db-init-volume
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+
+      volumes:
+        - name: db-init-volume
+          configMap:
+            name: db-init
+
+  volumeClaimTemplates:
+    - metadata:
+        name: db-storage
+
+      spec:
+        storageClassName: standard
+        accessModes:
+          - ReadWriteOnce
+
+        resources:
+          requests:
+            storage: 10Gi
