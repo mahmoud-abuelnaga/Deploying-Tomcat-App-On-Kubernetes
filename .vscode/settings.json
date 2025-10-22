@@ -1,0 +1,13 @@
+{
+  "yaml.schemas": {
+    "https://json.schemastore.org/kustomization.json": [
+      "**/kustomization.yaml"
+    ],
+    "kubernetes": ["**/*.yaml", "**/*.yml"]
+  },
+  "yaml.schemaStore.enable": true,
+  "yaml.schemaStore.url": "https://www.schemastore.org/api/json/catalog.json",
+  "yaml.validate": false,
+  "yaml.hover": true,
+  "yaml.format.enable": true
+}
