@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cache
+  labels:
+    tier: cache
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: cache
+
+  template:
+    metadata:
+      labels:
+        tier: cache
+
+    spec:
+      containers:
+        - name: memcached-container
+          image: memcached:alpine3.22
+          ports:
+            - name: memcached
+              containerPort: 11211
