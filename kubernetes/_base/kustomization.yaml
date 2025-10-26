@@ -33,3 +33,5 @@ resources:
   - cache/service.yaml
   - broker/deployment.yaml
   - broker/service.yaml
+  - backend/deployment.yaml
+  - backend/service.yaml

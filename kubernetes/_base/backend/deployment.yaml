@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: backend
+
+  template:
+    metadata:
+      labels:
+        tier: backend
+
+    spec:
+      containers:
+        - name: tomcat
+          image: abuelnaga0/vprofile-app-backend:v2
+          ports:
+            - name: http
+              containerPort: 8080
+
+      initContainers:
+        - name: wait-for-broker
+          image: busybox:1.37
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z broker 5672; do echo waiting for broker; sleep 5; done;",
+            ]
+
+        - name: wait-for-database
+          image: busybox:1.37
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z database 3306; do echo waiting for database; sleep 5; done;",
+            ]
+
+        - name: wait-for-cache
+          image: busybox:1.37
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z cache 11211; do echo waiting for cache; sleep 5; done;",
+            ]
