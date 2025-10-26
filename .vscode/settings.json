@@ -9,5 +9,6 @@
   "yaml.schemaStore.url": "https://www.schemastore.org/api/json/catalog.json",
   "yaml.validate": false,
   "yaml.hover": true,
-  "yaml.format.enable": true
+  "yaml.format.enable": true,
+  "java.compile.nullAnalysis.mode": "disabled"
 }
