@@ -17,6 +17,10 @@ secretGenerator:
     envs:
       - configs/database/.app.env
 
+  - name: broker-credentials
+    envs:
+      - configs/broker/.default.env
+
 configMapGenerator:
   - name: db-init
     files:
@@ -24,6 +28,8 @@ configMapGenerator:
 
 resources:
   - database/statefulset.yaml
-  - database/headless-service.yaml
+  - database/service.yaml
   - cache/deployment.yaml
   - cache/service.yaml
+  - broker/deployment.yaml
+  - broker/service.yaml

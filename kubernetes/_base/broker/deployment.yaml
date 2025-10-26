@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: broker
+
+  template:
+    metadata:
+      labels:
+        tier: broker
+
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:4.1.4-alpine
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: broker-credentials
+                  key: USERNAME
+
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: broker-credentials
+                  key: PASSWORD
+
+          ports:
+            - name: amqp
+              containerPort: 5672
